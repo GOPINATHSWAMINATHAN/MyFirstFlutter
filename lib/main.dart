@@ -11,6 +11,7 @@ void main() => runApp(MyApp());
 //List mapData=new List();
 List mapData;
 var mapData1;
+List myData;
 
 final List<String> entries = <String>['A', 'B', 'C'];
 final List<int> colorCodes = <int>[600, 500, 100];
@@ -41,36 +42,74 @@ class MyAppState extends State<MyApp> {
     return MaterialApp(
       title: "CidEx",
       home: Scaffold(
-        appBar: AppBar(
-          title: Text("CidEx"),
-        ),
-        body: ListView.builder(
-            padding: const EdgeInsets.all(8),
-            itemCount: _places == null ? 0 : _places.length,
-            itemBuilder: (BuildContext context, int index) {
-              return Card(
-                child: ListTile(
-                  leading: Image.network(_places[index].icon),
-                  title: Text(_places[index].placeName),
-                  trailing: Text("kms"),
-                  subtitle: RatingBar(
-                    initialRating: double.parse(_places[index].ratingStar),
-                    direction: Axis.horizontal,
-                    allowHalfRating: true,
-                    itemCount: 5,
-                    itemSize: 20.0,
-                    itemPadding: EdgeInsets.symmetric(horizontal: 0.0),
-                    itemBuilder: (context, _) => Icon(
-                      Icons.star,
-                      color: Colors.amber,
-                    ),
+        body: CustomScrollView(
+          slivers: <Widget>[
+             SliverAppBar(
+              
+              pinned: true,
+              expandedHeight: 150.0,
+              flexibleSpace: FlexibleSpaceBar(
+                background: Image.asset("images/face.png"),
+                title: Text('Hotels Near you'),
+              ),
+            ),
+            SliverFixedExtentList(
+              itemExtent: 80.0,
+              delegate: SliverChildBuilderDelegate(
+                (BuildContext context, int index) {
+                  return Card(
+                    //
+                    child: InkWell(
+                      onTap: () {
+                        String check =
+                            _places[index].photos[0]['photo_reference'];
+                        print(
+                            "https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photoreference=${_places[index].photos[0]['photo_reference']}&sensor=false&key=AIzaSyBdmudFBAV9h2feld1X7CndGN-6VHsGn2g");
+                        print(_places[index].photos[0]['photo_reference']);
+                        // print("PHOTO DATAaaaa($photos[index].photoReference)");
+                        _settingModalBottomSheet(context);
+                      },
+                      child: ListTile(
+                        leading: _places[index].photos == null ||
+                                _places[index].photos[0]["photo_reference"] ==
+                                    null
+                            ? Image.asset("images/face.png")
+                            : Container(
+                                width: 80,
+                                child: Image.network(
+                                    "https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photoreference=${_places[index].photos[0]['photo_reference']}&sensor=false&key=AIzaSyBdmudFBAV9h2feld1X7CndGN-6VHsGn2g")),
+                        //_places[index].icon
+                        title: Text(_places[index].placeName),
+                        subtitle: Container(
+                          width: 100,
+                          child: Text(_places[index].address,
+                              overflow: TextOverflow.ellipsis),
+                        ),
+                        trailing: RatingBar(
+                          initialRating:
+                              double.parse(_places[index].ratingStar),
+                          direction: Axis.horizontal,
+                          allowHalfRating: true,
+                          itemCount: 5,
+                          itemSize: 13.0,
+                          itemPadding: EdgeInsets.symmetric(horizontal: 0.0),
+                          itemBuilder: (context, _) => Icon(
+                            Icons.star,
+                            color: Colors.amber,
+                          ),
 //                  onRatingUpdate: (rating) {
 //                    print(rating);
 //                  },
-                  ),
-                ),
-              );
-            }),
+                        ),
+                      ),
+                    ),
+                  );
+                },
+                childCount: _places == null ? 0 : _places.length,
+              ),
+            ),
+          ],
+        ),
 //        body: ListView(
 //          children: <Widget>[
 //            Card(
@@ -119,7 +158,9 @@ class MyAppState extends State<MyApp> {
         f["latitude"].toString(),
         f["longitude"].toString(),
         f["name"].toString(),
-        f["icon"].toString())));
+        f["icon"].toString(),
+        f["vicinity"].toString(),
+        f["photos"])));
 
 //    if (res.statusCode == 200) {
 //      setState(() {
@@ -143,10 +184,11 @@ class MyAppState extends State<MyApp> {
 class Post {
   final String numOfRatings;
   final String latitude, longitude, ratingStar;
-  String placeName, icon;
+  String placeName, icon, address;
+  List photos;
 
   Post(this.ratingStar, this.numOfRatings, this.latitude, this.longitude,
-      this.placeName, this.icon);
+      this.placeName, this.icon, this.address, this.photos);
 
 //  factory Post.fromJson(Map<String, dynamic> json) {
 //    return Post(
@@ -157,4 +199,49 @@ class Post {
 //      placeName: json['name'] as String,
 //    );
 //}
+}
+
+void _settingModalBottomSheet(context) {
+  showModalBottomSheet(
+      context: context,
+      builder: (BuildContext bc) {
+        return Container(
+          child: Form(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                TextFormField(
+                  decoration: InputDecoration(
+                      hintText: "Please add the items to buy from shop!"),
+                  keyboardType: TextInputType.multiline,
+                  maxLines: 10,
+                  validator: (value) {
+                    if (value.isEmpty) {
+                      return 'Please Enter some text';
+                    }
+                    return null;
+                  },
+                ),
+                Text("Gopinath"),
+                Text("Manickam"),
+                Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 16.0),
+                    child: RaisedButton(
+                      onPressed: () {},
+                      child: Text('Buy'),
+                    ))
+              ],
+            ),
+          ),
+        );
+      });
+
+//  ListView.builder(
+//
+//
+//      padding: const EdgeInsets.all(8),
+//      itemCount: _places == null ? 0 : _places.length,
+//      itemBuilder: (BuildContext context, int index) {
+//        return
+//      })
 }
