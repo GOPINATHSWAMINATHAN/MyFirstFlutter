@@ -1,20 +1,21 @@
 import 'dart:convert';
 
 import 'package:cidexclient/Home.dart';
+import 'package:cidexclient/LoginPage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:flutter/foundation.dart';
 import 'package:http/http.dart';
 
-void main() => runApp(MyApp());
+void main() => runApp(LoginApp());
 //List mapData=new List();
 List mapData;
 var mapData1;
 List myData;
 
-final List<String> entries = <String>['A', 'B', 'C'];
-final List<int> colorCodes = <int>[600, 500, 100];
+//final List<String> entries = <String>['A', 'B', 'C'];
+//final List<int> colorCodes = <int>[600, 500, 100];
 
 class MyApp extends StatefulWidget {
   @override
@@ -244,4 +245,21 @@ void _settingModalBottomSheet(context) {
 //      itemBuilder: (BuildContext context, int index) {
 //        return
 //      })
+}
+
+class LoginApp extends StatelessWidget
+{
+  @override
+  Widget build(BuildContext context) {
+    // TODO: implement build
+    return new MaterialApp(
+      title: 'Login/Signup',
+      theme: new ThemeData(
+        primarySwatch: Colors.blue,
+
+      ),
+      home:new LoginPage(),
+    );
+  }
+
 }
