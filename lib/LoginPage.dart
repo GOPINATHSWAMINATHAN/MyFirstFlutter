@@ -1,11 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'Home.dart';
 import 'theme.dart' as Theme;
 import './utils/bubble_indication_painter.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class LoginPage extends StatefulWidget {
   LoginPage({Key key}) : super(key: key);
+
+  String a;
 
   @override
   _LoginPageState createState() => new _LoginPageState();
@@ -13,7 +18,7 @@ class LoginPage extends StatefulWidget {
 
 class _LoginPageState extends State<LoginPage>
     with SingleTickerProviderStateMixin {
-
+  FirebaseAuth _auth;
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
 
   final FocusNode myFocusNodeEmailLogin = FocusNode();
@@ -34,10 +39,10 @@ class _LoginPageState extends State<LoginPage>
   TextEditingController signupNameController = new TextEditingController();
   TextEditingController signupPasswordController = new TextEditingController();
   TextEditingController signupConfirmPasswordController =
-  new TextEditingController();
+      new TextEditingController();
 
   PageController _pageController;
-
+  bool _seen = false;
   Color left = Colors.black;
   Color right = Colors.white;
 
@@ -137,6 +142,20 @@ class _LoginPageState extends State<LoginPage>
     ]);
 
     _pageController = PageController();
+    checkShared();
+    print("Seen value${_seen}");
+
+  }
+
+   checkShared() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    _seen = (prefs.getBool('seen') ?? false);
+
+    if (_seen) {
+      Navigator.of(context).pushReplacement(
+          new MaterialPageRoute(builder: (context) => new Home()));
+    }
+    print("Seen value123${_seen}");
   }
 
   void showInSnackBar(String value) {
@@ -332,15 +351,16 @@ class _LoginPageState extends State<LoginPage>
                             fontFamily: "WorkSansBold"),
                       ),
                     ),
-                    onPressed: () =>
-                        showInSnackBar("Login button pressed")),
+                    onPressed: () => _handleSignIn()),
               ),
             ],
           ),
           Padding(
             padding: EdgeInsets.only(top: 10.0),
             child: FlatButton(
-                onPressed: () {},
+                onPressed: () {
+                  print("Welcome");
+                },
                 child: Text(
                   "Forgot Password?",
                   style: TextStyle(
@@ -634,8 +654,7 @@ class _LoginPageState extends State<LoginPage>
                             fontFamily: "WorkSansBold"),
                       ),
                     ),
-                    onPressed: () =>
-                        showInSnackBar("SignUp button pressed")),
+                    onPressed: () => _handleSignUp()),
               ),
             ],
           ),
@@ -671,5 +690,43 @@ class _LoginPageState extends State<LoginPage>
       _obscureTextSignupConfirm = !_obscureTextSignupConfirm;
     });
   }
-}
 
+  Future<FirebaseUser> _handleSignIn() async {
+    FirebaseUser user;
+    try {
+      final FirebaseAuth _auth = FirebaseAuth.instance;
+      user = (await _auth.signInWithEmailAndPassword(
+        email: loginEmailController.text.toString().trim(),
+        password: loginPasswordController.text.toString().trim(),
+      ))
+          .user;
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      await prefs.setBool('seen', true);
+      Navigator.of(context).pushReplacement(
+          new MaterialPageRoute(builder: (context) => new Home()));
+    } catch (e) {
+      print(e.message);
+    }
+    return user;
+  }
+
+  Future<FirebaseUser> _handleSignUp() async {
+    FirebaseUser user;
+    try {
+      final FirebaseAuth _auth = FirebaseAuth.instance;
+      if (signupPasswordController.text.toString().trim() ==
+          signupConfirmPasswordController.text.toString().trim()) {
+        user = (await _auth.createUserWithEmailAndPassword(
+                email: signupEmailController.text.toString().trim(),
+                password:
+                    signupConfirmPasswordController.text.toString().trim()))
+            .user;
+        print(user.uid);
+      } else {
+        showInSnackBar("Please check the password!");
+      }
+    } catch (e) {
+      print(e);
+    }
+  }
+}

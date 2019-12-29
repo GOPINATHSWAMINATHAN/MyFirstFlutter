@@ -2,13 +2,14 @@ import 'dart:convert';
 
 import 'package:cidexclient/Home.dart';
 import 'package:cidexclient/LoginPage.dart';
+import 'package:cidexclient/ShipmentList.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:flutter/foundation.dart';
 import 'package:http/http.dart';
 
-void main() => runApp(LoginApp());
+void main() => runApp(GetLogin());
 //List mapData=new List();
 List mapData;
 var mapData1;
@@ -16,6 +17,17 @@ List myData;
 
 //final List<String> entries = <String>['A', 'B', 'C'];
 //final List<int> colorCodes = <int>[600, 500, 100];
+
+class GetLogin extends StatelessWidget {
+
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+
+        home: new LoginPage());
+  }
+}
 
 class MyApp extends StatefulWidget {
   @override
@@ -45,8 +57,7 @@ class MyAppState extends State<MyApp> {
       home: Scaffold(
         body: CustomScrollView(
           slivers: <Widget>[
-             SliverAppBar(
-              
+            SliverAppBar(
               pinned: true,
               expandedHeight: 150.0,
               flexibleSpace: FlexibleSpaceBar(
@@ -247,8 +258,7 @@ void _settingModalBottomSheet(context) {
 //      })
 }
 
-class LoginApp extends StatelessWidget
-{
+class LoginApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
@@ -256,10 +266,8 @@ class LoginApp extends StatelessWidget
       title: 'Login/Signup',
       theme: new ThemeData(
         primarySwatch: Colors.blue,
-
       ),
-      home:new LoginPage(),
+      home: new LoginPage(),
     );
   }
-
 }

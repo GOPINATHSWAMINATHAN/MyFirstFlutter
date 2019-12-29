@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "275112888107",
+    "firebase_url": "https://cidexclientflutter.firebaseio.com",
+    "project_id": "cidexclientflutter",
+    "storage_bucket": "cidexclientflutter.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:275112888107:android:decdc4a0fcc6c7c56da76e",
+        "android_client_info": {
+          "package_name": "cidexclient.application.com.cidexclient"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "275112888107-k09ar0m2vao50u8ha3ohg81o3h5gsgeu.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCpbyiorZUn1-cD_6rCkYd1r6TLZd09lrs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "275112888107-k09ar0m2vao50u8ha3ohg81o3h5gsgeu.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
