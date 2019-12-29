@@ -76,7 +76,7 @@ class MyAppState extends State<MyApp> {
                         String check =
                             _places[index].photos[0]['photo_reference'];
                         print(
-                            "https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photoreference=${_places[index].photos[0]['photo_reference']}&sensor=false&key=AIzaSyBdmudFBAV9h2feld1X7CndGN-6VHsGn2g");
+                            "https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photoreference=${_places[index].photos[0]['photo_reference']}&sensor=false&key='REPLACE WITH YOUR OWN KEY'");
                         print(_places[index].photos[0]['photo_reference']);
                         // print("PHOTO DATAaaaa($photos[index].photoReference)");
                         _settingModalBottomSheet(context);
@@ -89,7 +89,7 @@ class MyAppState extends State<MyApp> {
                             : Container(
                                 width: 80,
                                 child: Image.network(
-                                    "https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photoreference=${_places[index].photos[0]['photo_reference']}&sensor=false&key=AIzaSyBdmudFBAV9h2feld1X7CndGN-6VHsGn2g")),
+                                    "https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photoreference=${_places[index].photos[0]['photo_reference']}&sensor=false&key='Replace with your own key'")),
                         //_places[index].icon
                         title: Text(_places[index].placeName),
                         subtitle: Container(
